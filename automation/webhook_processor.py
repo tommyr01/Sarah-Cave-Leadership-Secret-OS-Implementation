@@ -701,14 +701,14 @@ if __name__ == "__main__":
     test_config = {
         'airtable_webhook_secret': 'test-secret',
         'openai_api_key': 'test-api-key',
-        'base_id': 'apprycS5cqCdLNF76',
+        'base_id': 'appovmJ15ALIjbpDp',
         'enabled_automations': ['lead_scoring', 'session_processing', 'client_health']
     }
     
     # Test webhook payload
     test_payload = {
         'webhook': {'id': 'webhook-123'},
-        'base': {'id': 'apprycS5cqCdLNF76'},
+        'base': {'id': 'appovmJ15ALIjbpDp'},
         'timestamp': '2024-12-09T10:00:00.000Z',
         'changedTablesById': {
             'tbl123': {

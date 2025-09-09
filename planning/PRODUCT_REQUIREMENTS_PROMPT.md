@@ -14,7 +14,7 @@
 
 ### 2. Check Current Implementation Status
 ```
-- Connect to Airtable MCP to examine "The Leadership Secret Operating System" base (apprycS5cqCdLNF76)
+- Connect to Airtable MCP to examine "The Leadership Secret Operating System" base (appovmJ15ALIjbpDp)
 - Review all 8 table schemas: Leads, Clients, Coaching Sessions, Leadership Models, Associates, Action Items, Deals, Invoices
 - Check automation/lead_scoring.py for AI implementation status
 ```

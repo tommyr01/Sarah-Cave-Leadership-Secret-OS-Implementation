@@ -107,7 +107,7 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
 
 ## 🔗 Related Resources
 
-- [Airtable Base](https://airtable.com/apprycS5cqCdLNF76) - The Leadership Secret Operating System
+- [Airtable Base](https://airtable.com/appovmJ15ALIjbpDp) - The Leadership Secret Operating System
 - [Planning Documents](./planning/) - Complete requirements and architecture
 - [API Documentation](./docs/api-reference.md) - Endpoint specifications
 

@@ -51,7 +51,7 @@ In Vercel dashboard → Project Settings → Environment Variables, add:
 ```
 OPENAI_API_KEY=sk-your-openai-api-key-here
 AIRTABLE_API_KEY=pat.your-airtable-personal-access-token
-AIRTABLE_BASE_ID=appYourAirtableBaseId
+AIRTABLE_BASE_ID=appovmJ15ALIjbpDp
 ```
 
 ### 4. Deploy
