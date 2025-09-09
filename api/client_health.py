@@ -148,19 +148,19 @@ class handler(BaseHTTPRequestHandler):
     def extract_client_data(self, fields: Dict[str, Any]) -> Dict[str, Any]:
         """Extract client data from Airtable fields."""
         return {
-            'client_name': fields.get('Name', ''),
+            'client_name': fields.get('Client Name', ''),
             'email': fields.get('Email', ''),
-            'company': fields.get('Company', ''),
-            'title': fields.get('Title', ''),
-            'coaching_start_date': fields.get('Coaching Start Date', ''),
-            'last_session_date': fields.get('Last Session Date', ''),
+            'company': fields.get('Company/Role', ''),
+            'title': fields.get('Company/Role', ''),
+            'coaching_start_date': fields.get('Start Date', ''),
+            'last_session_date': fields.get('Last Contact', ''),
             'total_sessions': fields.get('Total Sessions', 0),
             'session_frequency': fields.get('Session Frequency', 'Bi-weekly'),
-            'engagement_level': fields.get('Engagement Level', 'Medium'),
-            'payment_status': fields.get('Payment Status', 'Current'),
+            'engagement_level': fields.get('Status', 'Active'),
+            'payment_status': fields.get('Status', 'Current'),
             'satisfaction_score': fields.get('Satisfaction Score', 0),
-            'goals_progress': fields.get('Goals Progress', ''),
-            'challenges': fields.get('Current Challenges', ''),
+            'goals_progress': fields.get('Session Notes Summary', ''),
+            'challenges': fields.get('Notes', ''),
             'communication_preference': fields.get('Communication Preference', 'Email'),
             'notes': fields.get('Notes', '')
         }
