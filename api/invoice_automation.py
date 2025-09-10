@@ -31,9 +31,9 @@ class handler(BaseHTTPRequestHandler):
                 self.send_error_response(400, "No request body")
                 return
             
-            # Process invoice automation
-            trigger_type = payload.get('triggerType', 'session_completed')
-            session_data = payload.get('sessionData', {})
+            # Process invoice automation  
+            trigger_type = payload.get('automationType', payload.get('triggerType', 'session_completed'))
+            session_data = payload.get('recordData', payload.get('sessionData', {}))
             
             results = {
                 'trigger_type': trigger_type,
