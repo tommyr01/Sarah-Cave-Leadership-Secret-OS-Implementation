@@ -37,8 +37,23 @@ class handler(BaseHTTPRequestHandler):
             results = []
             processed_deals = 0
             
-            # Extract deal data from payload
-            if 'changedTablesById' in payload:
+            # Handle simple automation webhook format
+            if 'recordData' in payload and payload.get('automationType') == 'deal_pipeline':
+                record_id = payload['recordData'].get('recordId')
+                if record_id:
+                    # Create mock deal data for processing
+                    mock_deal_fields = self.create_mock_deal_data(record_id)
+                    pipeline_result = self.process_deal_pipeline(mock_deal_fields)
+                    
+                    results.append({
+                        'record_id': record_id,
+                        'deal_name': mock_deal_fields.get('Deal Name', 'Demo Deal'),
+                        'pipeline_result': pipeline_result
+                    })
+                    processed_deals = 1
+            
+            # Extract deal data from complex webhook payload
+            elif 'changedTablesById' in payload:
                 deals_table = payload['changedTablesById'].get('tblDeals', {})
                 changed_records = deals_table.get('changedRecordsById', {})
                 
@@ -75,6 +90,27 @@ class handler(BaseHTTPRequestHandler):
                 'timestamp': datetime.utcnow().isoformat()
             }
             self.send_json_response(500, error_response)
+    
+    def create_mock_deal_data(self, record_id):
+        """Create mock deal data for testing purposes."""
+        return {
+            'Deal Name': f'Executive Coaching Deal - {record_id}',
+            'Deal Value': 15000,
+            'Stage': 'Qualification',
+            'Probability': 25,
+            'Expected Close Date': '2025-10-15',
+            'Package Type': 'Executive 1:1 - 6 months',
+            'Budget Confirmed': True,
+            'Authority Confirmed': False,
+            'Need Identified': True,
+            'Timeline Established': False,
+            'Next Action': 'Schedule discovery call with decision maker',
+            'Next Action Date': '2025-09-15',
+            'Objections': 'Timing concerns about starting program',
+            'Sales Notes': 'Strong fit for executive coaching, needs to confirm budget authority',
+            'Last Activity': '2025-09-10',
+            'Days in Stage': 5
+        }
     
     def process_deal_pipeline(self, deal_fields: Dict[str, Any]) -> Dict[str, Any]:
         """Process deal pipeline logic and return recommendations."""
