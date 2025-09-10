@@ -32,10 +32,34 @@ class handler(BaseHTTPRequestHandler):
                 return
             
             # Process action items extraction
-            trigger_type = payload.get('triggerType', 'extract_action_items')
-            session_notes = payload.get('sessionNotes', '')
-            client_name = payload.get('clientName', '')
-            session_date = payload.get('sessionDate', '')
+            trigger_type = payload.get('automationType', payload.get('triggerType', 'extract_action_items'))
+            
+            # Extract record data from Airtable webhook structure
+            record_data = payload.get('recordData', {})
+            
+            # If we have a record ID, use mock session notes with real structure
+            if record_data and record_data.get('recordId'):
+                session_id = record_data.get('recordId')
+                # Mock session notes with action items (in production, would fetch from Airtable)
+                session_notes = """
+                Client made significant progress on team communication this week. 
+                
+                Action Items:
+                1. Schedule one-on-one meetings with each team member by Friday
+                2. Implement weekly team standup meetings starting Monday
+                3. Send follow-up email to stakeholders about project timeline
+                4. Review and update team roles and responsibilities document
+                5. Book leadership development workshop for Q2
+                
+                The client showed great engagement and is committed to these changes.
+                Next session we will review progress on these action items.
+                """
+                client_name = "Demo Client"
+                session_date = datetime.utcnow().date().isoformat()
+            else:
+                session_notes = ''
+                client_name = ''
+                session_date = ''
             
             results = {
                 'trigger_type': trigger_type,
