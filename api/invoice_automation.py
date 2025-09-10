@@ -48,7 +48,7 @@ class handler(BaseHTTPRequestHandler):
             }
             
             # Process based on trigger type
-            if trigger_type == 'session_completed':
+            if trigger_type in ['invoice_automation', 'session_completed']:
                 invoice_results = self.process_session_completion(session_data)
                 results.update(invoice_results)
                 
@@ -59,6 +59,10 @@ class handler(BaseHTTPRequestHandler):
             elif trigger_type == 'payment_update':
                 payment_results = self.process_payment_update(session_data)
                 results.update(payment_results)
+            else:
+                # Default to session completion
+                invoice_results = self.process_session_completion(session_data)
+                results.update(invoice_results)
             
             # Send success response
             response_data = {
@@ -81,7 +85,7 @@ class handler(BaseHTTPRequestHandler):
     def process_session_completion(self, session_data: Dict[str, Any]) -> Dict[str, Any]:
         """Process invoice generation when a session is completed."""
         
-        session_id = session_data.get('sessionId', '')
+        session_id = session_data.get('sessionId', session_data.get('recordId', ''))
         client_id = session_data.get('clientId', '')
         
         # Mock session data - in real implementation, would fetch from Airtable
