@@ -78,6 +78,8 @@ class handler(BaseHTTPRequestHandler):
 
                 # Parse action items
                 parsed_items = self.parse_action_items(action_items_text)
+                print(f"DEBUG: Action items text: '{action_items_text}'")
+                print(f"DEBUG: Parsed items: {parsed_items}")
 
                 # Create action item records with date parsing
                 created_items = self.create_action_item_records(
