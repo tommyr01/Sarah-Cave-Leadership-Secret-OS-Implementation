@@ -119,6 +119,10 @@ class handler(BaseHTTPRequestHandler):
         if not items:
             items = [item.strip() for item in action_items_text.split('\n') if item.strip()]
 
+        # If still no items and we have text, treat the whole text as one action item
+        if not items and action_items_text.strip():
+            items = [action_items_text.strip()]
+
         # Clean up items (remove numbering, extra whitespace)
         cleaned_items = []
         for item in items:
