@@ -315,15 +315,10 @@ class handler(BaseHTTPRequestHandler):
                     print(f"Error fetching attendee {attendee_id}: {e}")
                     continue
 
-            # Format attendee names for inclusion in action item text
-            attendee_prefix = ""
-            if attendee_names:
-                attendee_prefix = f"{', '.join(attendee_names)}: "
-
             # Prepare records for bulk creation
             records_to_create = []
             for item in parsed_items:
-                action_item_text = f"{attendee_prefix}{item}"
+                action_item_text = item
 
                 # Extract due date if present
                 due_date = self.extract_due_date(item, meeting_date)
