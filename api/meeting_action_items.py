@@ -73,17 +73,14 @@ class handler(BaseHTTPRequestHandler):
                 attendees = fields.get('Attendees', [])
                 meeting_date = fields.get('Created')
 
-                # Get attendee names
-                attendee_names = self.get_attendee_names(attendees, airtable_key, base_id)
-
                 # Parse action items
                 parsed_items = self.parse_action_items(action_items_text)
                 print(f"DEBUG: Action items text: '{action_items_text}'")
                 print(f"DEBUG: Parsed items: {parsed_items}")
 
-                # Create action item records with date parsing
+                # Create action item records with client linking
                 created_items = self.create_action_item_records(
-                    parsed_items, attendee_names, meeting_title, meeting_date,
+                    parsed_items, attendees, meeting_title, meeting_date,
                     airtable_key, base_id
                 )
 
@@ -286,7 +283,7 @@ class handler(BaseHTTPRequestHandler):
             print(f"Error getting attendee names: {e}")
             return ['Unknown Attendee'] * len(attendee_record_ids)
 
-    def create_action_item_records(self, parsed_items, attendee_names, meeting_title, meeting_date, airtable_key, base_id):
+    def create_action_item_records(self, parsed_items, attendee_records, meeting_title, meeting_date, airtable_key, base_id):
         """Create individual action item records in the Action Items table"""
         if not parsed_items:
             return []
@@ -297,7 +294,28 @@ class handler(BaseHTTPRequestHandler):
                 'Content-Type': 'application/json'
             }
 
-            # Format attendee names for inclusion
+            # Filter out Sarah Cave and get client attendees for linking
+            client_attendees = []
+            attendee_names = []
+
+            for attendee_id in attendee_records:
+                try:
+                    url = f'https://api.airtable.com/v0/{base_id}/Clients/{attendee_id}'
+                    response = requests.get(url, headers=headers)
+
+                    if response.status_code == 200:
+                        record_data = response.json()
+                        client_name = record_data.get('fields', {}).get('Client Name', '')
+
+                        # Skip Sarah Cave as she's the user, not a client
+                        if client_name and client_name != 'Sarah Cave':
+                            client_attendees.append(attendee_id)
+                            attendee_names.append(client_name)
+                except Exception as e:
+                    print(f"Error fetching attendee {attendee_id}: {e}")
+                    continue
+
+            # Format attendee names for inclusion in action item text
             attendee_prefix = ""
             if attendee_names:
                 attendee_prefix = f"{', '.join(attendee_names)}: "
@@ -316,6 +334,10 @@ class handler(BaseHTTPRequestHandler):
                     "Status": "Open",
                     "Priority": "Medium"
                 }
+
+                # Link to client attendees (exclude Sarah Cave)
+                if client_attendees:
+                    record_fields["Client"] = client_attendees
 
                 # Add due date only if found
                 if due_date:
