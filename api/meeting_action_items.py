@@ -313,7 +313,7 @@ class handler(BaseHTTPRequestHandler):
                 # Build record fields
                 record_fields = {
                     "Action Item": action_item_text,
-                    "Status": "Not Started",
+                    "Status": "Open",
                     "Priority": "Medium"
                 }
 
